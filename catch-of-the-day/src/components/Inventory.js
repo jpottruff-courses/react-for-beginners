@@ -9,7 +9,8 @@ class Inventory extends React.Component {
             <div className="inventory">
                 <h2>Inventory</h2>
                 {/* NOTE: addFish has been passed via props (ie. doesnt actually live here) - so it is no longer this.addFish*/}
-                <AddFishForm addFish={this.props.addFish}/>
+                <AddFishForm addFish={this.props.addFish} />
+                <button onClick={this.props.loadSampleFishes}>Load Sample Fishes</button>
             </div>
         )
     }

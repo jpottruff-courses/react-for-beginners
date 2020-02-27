@@ -2,13 +2,17 @@ import React from 'react';
 import Header from './Header';
 import Order from './Order';
 import Inventory from './Inventory';
+import Fish from './Fish';
+import sampleFishes from '../sample-fishes';
 
 class App extends React.Component {
-
+// STATE
     state = {
         fishes: {},
         order: {}
     };
+
+// LIFECYCLE EVENTS
 
     addFish = fish => {
         //Need to use REACT SetState API
@@ -20,17 +24,35 @@ class App extends React.Component {
         fishes[`fish${Date.now()}`] = fish;
 
         // 3. Set new fishes object ot state (build in React method)
-        this.setState({
-            fishes: fishes
-        });
+        // this.setState({
+        //     fishes: fishes
+        // });
 
         // Cleaner
-        // this.setState({ fishes });
+        this.setState({ fishes });
 
-        console.log(this.state.fishes);
+        // console.log(this.state.fishes);
     }
 
+    loadSampleFishes = () => {
+        this.setState({fishes: sampleFishes});
+    }
 
+    addToOrder = key => {
+        // 1. Take a copy of state
+        const order = {...this.state.order};
+
+        // 2. Either ADD to order OR INCREMENT Amoutn
+        order[key] = order[key] + 1 || 1;
+
+        // 3. Call setState to update the state object
+        this.setState({ order });
+    }
+
+//CUSTOM STUFF
+// ...
+
+// RENDER
     render() {
         return (
             <div className="catch-of-the-day">
@@ -38,10 +60,21 @@ class App extends React.Component {
                 <div className="menu">
                     {/* <Header /> */}
                     <Header tagline="Custom tagline PROPS" notStringNumberProp={10} propsNotString={true}/>  {/* Example of sending in PROPS */}
+                    {/* Fish Added in module 15 */}
+                    <ul className="fishes">
+	                    {Object.keys(this.state.fishes).map( key => (
+                            <Fish 
+                                key={key} 
+                                index={key} 
+                                details={this.state.fishes[key]} 
+                                addToOrder={this.addToOrder} 
+                            /> 
+                        ))}
+                    </ul>
                 </div>
                 <Order />
                 {/* Passing down function with PROPS */}
-                <Inventory addFish={this.addFish} />
+                <Inventory addFish={this.addFish} loadSampleFishes={this.loadSampleFishes} />
             </div>
         )
     }
