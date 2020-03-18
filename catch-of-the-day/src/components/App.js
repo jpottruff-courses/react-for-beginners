@@ -72,9 +72,22 @@ class App extends React.Component {
                         ))}
                     </ul>
                 </div>
-                <Order />
+                {/* Module 17 - Passing the order down */}
+                {/* We could do it this way ... but since we are essentially passing down all State...*/}
+                <Order 
+                    fishes={this.state.fishes} 
+                    order={this.state.order}
+                />
+
+                {/* We can use an Object Spread instead - but you can run into problems - just an option*/}
+                {/* Basically dont pass down your ENTIRE state - but you could do it with an object */}
+                {/* <Order {...this.state} /> */}
+
                 {/* Passing down function with PROPS */}
-                <Inventory addFish={this.addFish} loadSampleFishes={this.loadSampleFishes} />
+                <Inventory 
+                    addFish={this.addFish} 
+                    loadSampleFishes={this.loadSampleFishes} 
+                />
             </div>
         )
     }
