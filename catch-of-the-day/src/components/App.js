@@ -5,12 +5,42 @@ import Inventory from './Inventory';
 import Fish from './Fish';
 import sampleFishes from '../sample-fishes';
 
+import base from '../base';
+
 class App extends React.Component {
 // STATE
     state = {
         fishes: {},
         order: {}
     };
+
+// Module 18 - Adding lifecycle method
+componentDidMount() {
+    console.log('Mounted!!!!!!');
+    
+    // note ref in this context are references to a peice of data in the database
+    // NOT like the refs we did earlier 
+    // we want to sync the data ONLY With the store name we are currently in 
+    // can use the React Router
+
+    const { params } = this.props.match;
+    // Sync State also requires an Object of options
+    this.ref = base.syncState(`${params.storeId}/fishes`, {
+        //Options
+        context: this,
+        state: 'fishes'
+    });
+
+}
+
+// This method helps us clean up when the component is UMOUNTED  (must clean up any memory issues)
+// Example - going back (ie. clicking back) to the store pciker? stop listening for changes on current store
+componentWillUnmount() {
+    // console.log('UNMOUNTING');
+    
+    // 1. Remove bining to the ref (ie. current store)_- see above
+    base.removeBinding(this.ref);
+}
 
 // LIFECYCLE EVENTS
 
