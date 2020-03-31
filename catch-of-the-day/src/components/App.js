@@ -10,26 +10,48 @@ import base from '../base';
 class App extends React.Component {
 // STATE
     state = {
-        fishes: {},
-        order: {}
+        fishes: {},                     // persisting this in firebase
+        order: {}                       // persisting this in local        
     };
 
 // Module 18 - Adding lifecycle method
 componentDidMount() {
     console.log('Mounted!!!!!!');
+    const { params } = this.props.match;
+
+    //Module 19 - Local Storage reinstatement
+    const localStorageRef = localStorage.getItem(params.storeId);
+    
+    // Sometimes there will be no matching store - we only need to load it if there is.
+    //  Also remember we stringified the Objkect - need to reverse that with JSON parse
+    if (localStorageRef) {
+        this.setState({ order: JSON.parse(localStorageRef) })
+    }
     
     // note ref in this context are references to a peice of data in the database
     // NOT like the refs we did earlier 
     // we want to sync the data ONLY With the store name we are currently in 
     // can use the React Router
 
-    const { params } = this.props.match;
+   
     // Sync State also requires an Object of options
     this.ref = base.syncState(`${params.storeId}/fishes`, {
         //Options
         context: this,
         state: 'fishes'
     });
+
+}
+
+// Module 19 - using local storage with this one 
+componentDidUpdate() {
+    console.log('IT UPDATED');
+    console.log(this.state.order);
+    
+    // Key value pair of the STORE and ORDER (BUT this will have a value of [object Object] - it is expecting a string)
+    // localStorage.setItem(this.props.match.params.storeId, this.state.order);
+    
+    localStorage.setItem(this.props.match.params.storeId, JSON.stringify(this.state.order));
 
 }
 

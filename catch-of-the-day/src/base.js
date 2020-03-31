@@ -1,10 +1,11 @@
 import Rebase from 're-base';   // react firebase specific
 import firebase from "firebase";
+import {API_KEY, AUTH_DOMAIN, DATABASE_URL} from './constants';
 
 const firebaseApp = firebase.initializeApp({
-    apiKey: "AIzaSyAeaW-BPEUZIV7UrRujkoq3NuSi4Q9IwJ0",
-    authDomain: "catch-of-the-day-tutoria-c5198.firebaseapp.com",
-    databaseURL: "https://catch-of-the-day-tutoria-c5198.firebaseio.com",
+    apiKey: API_KEY,
+    authDomain: AUTH_DOMAIN,
+    databaseURL: DATABASE_URL,
 });
 
 
