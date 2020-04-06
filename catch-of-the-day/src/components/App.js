@@ -86,6 +86,30 @@ componentWillUnmount() {
         // console.log(this.state.fishes);
     }
 
+    // Module 20: will be coming in from Edit Fish -> Inventory -> App
+    updateFish = (key, updatedFish) => {
+        // 1. Take a copy of the current STATE (NOTE: not props - we are in the componenet where the STATE is living)
+        const fishes = { ...this.state.fishes};
+
+        // 2. Update the state
+        fishes[key] = updatedFish; 
+
+        // 3. Set that to State
+        this.setState( {fishes} );
+    }
+
+    deleteFish = (key) => {
+        // 1. Take a copy of state 
+        // (NOTE: we keep copying state becuase it is an OBJECT; If it was an array we could probably 1 line this )
+        const fishes = { ...this.state.fishes };
+
+        // 2. Delete fish 
+        fishes[key] = null;
+
+        // 3. Udpdate the state
+        this.setState({fishes});
+    }
+
     loadSampleFishes = () => {
         this.setState({fishes: sampleFishes});
     }
@@ -96,6 +120,18 @@ componentWillUnmount() {
 
         // 2. Either ADD to order OR INCREMENT Amoutn
         order[key] = order[key] + 1 || 1;
+
+        // 3. Call setState to update the state object
+        this.setState({ order });
+    }
+
+    // Module 21
+    removeFromOrder = key => {
+        // 1. Take a copy of state
+        const order = {...this.state.order};
+
+        // 2. Remove from the order (NOTE: can use delete here cause not mirroring to firebase)
+        delete order[key];
 
         // 3. Call setState to update the state object
         this.setState({ order });
@@ -129,6 +165,7 @@ componentWillUnmount() {
                 <Order 
                     fishes={this.state.fishes} 
                     order={this.state.order}
+                    removeFromOrder={this.removeFromOrder}
                 />
 
                 {/* We can use an Object Spread instead - but you can run into problems - just an option*/}
@@ -138,7 +175,10 @@ componentWillUnmount() {
                 {/* Passing down function with PROPS */}
                 <Inventory 
                     addFish={this.addFish} 
+                    updateFish={this.updateFish} 
+                    deleteFish={this.deleteFish} 
                     loadSampleFishes={this.loadSampleFishes} 
+                    fishes={this.state.fishes}
                 />
             </div>
         )
