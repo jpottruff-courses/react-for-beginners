@@ -1,5 +1,6 @@
 import React from 'react';
 import { formatPrice } from '../helpers';
+import { TransitionGroup, CSSTransition } from "react-transition-group"; 
 
 class Order extends React.Component {
     // Splitting out some of the code below
@@ -13,23 +14,35 @@ class Order extends React.Component {
         // If the fish is not available display it as such
         if (!isAvailable) {
             return (
-                // unqiue key prop (so react can easily find it)
-                <li key={key}>
-                    {/* this is a fallback in case the fish gets deleted from inventory */}
-                    {/* if there is a fish name - it displays; if not  just says 'fish' */}
-                    Sorry {fish ? fish.name : 'fish'} is no longer available
-                </li>
+                <CSSTransition
+                    classNames="order"
+                    key={key}
+                    timeout={{ enter: 250, exit: 250 }}
+                >
+                    {/* unqiue key prop (so react can easily find it) */}
+                    <li key={key}>
+                        {/* this is a fallback in case the fish gets deleted from inventory */}
+                        {/* if there is a fish name - it displays; if not  just says 'fish' */}
+                        Sorry {fish ? fish.name : 'fish'} is no longer available
+                    </li>
+                </CSSTransition>
             );
         }
-
+        
         // otherwise display it
         return (
-            // unqiue key prop (so react can easily find it)
-            <li key={key}>
-                {count} lbs {fish.name}
-                {formatPrice(count * fish.price)}
-                <button onClick={ () => this.props.removeFromOrder(key)}>&times;</button>
-            </li>
+            <CSSTransition
+                classNames="order"
+                key={key}
+                timeout={{ enter: 250, exit: 250 }}
+                >
+                {/* unqiue key prop (so react can easily find it) */}
+                <li key={key}>
+                    {count} lbs {fish.name}
+                    {formatPrice(count * fish.price)}
+                    <button onClick={ () => this.props.removeFromOrder(key)}>&times;</button>
+                </li>
+            </CSSTransition>
         );
     };
 
@@ -58,11 +71,20 @@ class Order extends React.Component {
         return (
             <div className="order-wrap">
                 <h2>orrrrder</h2>
-                <ul className="order">
+                {/* PRE MODULE 22 - Animation */}
+                {/* <ul className="order"> */}
+                    {/* maps each key in the orderIds array to a list item */}
+                    {/* {orderIds.map(key => <li>{key}</li>)} */}
+                    {/* {orderIds.map(this.renderOrder)} */}
+                {/* </ul> */}
+
+                {/* MODULE 22: ANIMATION */}
+                <TransitionGroup component="ul"
+                                 className="order">
                     {/* maps each key in the orderIds array to a list item */}
                     {/* {orderIds.map(key => <li>{key}</li>)} */}
                     {orderIds.map(this.renderOrder)}
-                </ul>
+                </TransitionGroup>
                 <div className="total">
                     Total: 
                     <strong>{formatPrice(total)}</strong>
